@@ -1,5 +1,22 @@
 const acorn = require('acorn')
 
+
+class BreakPointASTReplacement {
+
+	constructor() {
+		this.replacementList = {
+			"Literal": ["Literal", "Identifier"]
+		}
+	}
+
+	getReplacementList() {
+		if (!this.replacementList) throw new Error("Replacement list not initialised")
+
+		return this.replacementList
+	}
+}
+
+
 class BreakPointASTBuilder {
 
 	constructor(ctx, node) {
@@ -11,17 +28,15 @@ class BreakPointASTBuilder {
 		if (!this.ctx) return false;
 
 		if (!this.node) return false;
-
-		let n = new acorn.Node(
-			this.ctx
-		)
-
+		
+		let n = new acorn.Node(this.ctx)
 		n.type = "Literal"
 		n.start = this.node.start
 		n.value = value
 		n.raw = value.toString()
 		return n
 	}
+
 }
 
 
@@ -33,11 +48,26 @@ class BreakPointAST extends acorn.Parser {
 		super({ecmaVersion: 6}, source_code)
 		this.ast = 	this.parse()
 		this.eventListener = {}
+		this.breakpoint_replacement = new BreakPointASTReplacement().getReplacementList()
+	}
+
+	check_valid_replacement_expression(node, new_node) {
+		for (let n of this.breakpoint_replacement[node.type]) {
+			if (n === new_node.type)
+				return true
+		}
+
+		return false;
 	}
 
 
 	replaceExpression(node, new_node) {
-		
+		if (node.constructor.name !== 'Node' && new_node.constructor.name !== 'Node') throw new Error("Node and new node must be Node")
+
+		if(!this.check_valid_replacement_expression(node, new_node)) throw new Error(`${node.type} can be replaced by ${new_node.type}`)
+
+		Object.assign(node, new_node)
+
 	}
 
 
