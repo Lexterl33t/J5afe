@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "@babel/generator": "^7.22.9",
     "acorn": "^8.10.0",
-    "astring": "^1.8.6"
+    "astring": "^1.8.6",
+    "babel": "^6.23.0"
   }
 }

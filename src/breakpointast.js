@@ -5,8 +5,8 @@ class BreakPointASTReplacement {
 
 	constructor() {
 		this.replacementList = {
-			"Literal": ["Literal", "Identifier"],
-			"BinaryExpression": ["Literal"]
+			"Literal": ["Literal", "Identifier", "BinaryExpression"],
+			"BinaryExpression": ["Literal", "Identifier"]
 		}
 	}
 
@@ -42,13 +42,26 @@ class BreakPointASTBuilder {
 		if (!this.ctx) return false;
 		if (!this.node) return false;
 
-
 		let n = new acorn.Node(this.ctx)
 
 		n.type = "Identifier"
 		n.start = this.node.start
 		n.name = name;
 
+		return n
+	}
+
+	createBinaryExpression(op, left, right) {
+		if (!this.ctx) return false;
+		if (!this.node) return false;
+
+		let n = new acorn.Node(this.ctx)
+
+		n.type = "BinaryExpression"
+		n.start = this.node.start
+		n.left = left;
+		n.operator = op;
+		n.right = right
 		return n
 	}
 }
@@ -78,7 +91,7 @@ class BreakPointAST extends acorn.Parser {
 	replaceExpression(node, new_node) {
 		if (node.constructor.name !== 'Node' && new_node.constructor.name !== 'Node') throw new Error("Node and new node must be Node")
 
-		if(!this.check_valid_replacement_expression(node, new_node)) throw new Error(`${node.type} can be replaced by ${new_node.type}`)
+		if(!this.check_valid_replacement_expression(node, new_node)) throw new Error(`${node.type} can't be replaced by ${new_node.type}`)
 
 		Object.assign(node, new_node)
 
@@ -111,8 +124,6 @@ class BreakPointAST extends acorn.Parser {
 			case '|': return this._evaluate(node.left) | this._evaluate(node.right)
 			case '^': return this._evaluate(node.left) ^ this._evaluate(node.right)
 			}
-		case 'Identifier':
-			return 0;
 		}
 	}
 
