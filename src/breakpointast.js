@@ -1,12 +1,26 @@
 const acorn = require('acorn')
 
-class BreakPointASTBuilder extends acorn.Node {
+class BreakPointASTBuilder {
 
+	constructor(ctx, node) {
+		this.node = node;
+		this.ctx = ctx
+	}
 	
 	createLiteral(value) {
-		return new acorn.Node(
+		if (!this.ctx) return false;
 
+		if (!this.node) return false;
+
+		let n = new acorn.Node(
+			this.ctx
 		)
+
+		n.type = "Literal"
+		n.start = this.node.start
+		n.value = value
+		n.raw = value.toString()
+		return n
 	}
 }
 
@@ -19,6 +33,11 @@ class BreakPointAST extends acorn.Parser {
 		super({ecmaVersion: 6}, source_code)
 		this.ast = 	this.parse()
 		this.eventListener = {}
+	}
+
+
+	replaceExpression(node, new_node) {
+		
 	}
 
 
@@ -74,7 +93,7 @@ class BreakPointAST extends acorn.Parser {
 		switch(node.type) {
 			case 'VariableDeclaration':
 				if (this.eventListener[node.type]) {
-					this.eventListener[node.type](this, node)
+					this.eventListener[node.type](this, node, (new BreakPointASTBuilder(this, node)))
 				} 
 
 				for (let decl of node.declarations) {
@@ -83,14 +102,14 @@ class BreakPointAST extends acorn.Parser {
 				break
 			case 'VariableDeclarator':
 				if (this.eventListener[node.type]) {
-					this.eventListener[node.type](this, node)
+					this.eventListener[node.type](this, node, (new BreakPointASTBuilder(this, node)))
 				} 
 				this.depth(node.id)
 				this.depth(node.init)
 				break
 			case 'IfStatement':
 				if (this.eventListener[node.type]) {
-					this.eventListener[node.type](this, node)
+					this.eventListener[node.type](this, node, (new BreakPointASTBuilder(this, node)))
 				} 
 				this.depth(node.test)
 				this.depth(node.consequents)
@@ -98,7 +117,7 @@ class BreakPointAST extends acorn.Parser {
 				break
 			case 'BinaryExpression':
 				if (this.eventListener[node.type]) {
-					this.eventListener[node.type](this, node)
+					this.eventListener[node.type](this, node, (new BreakPointASTBuilder(this, node)))
 				} else {
 					this.depth(node.left)
 					this.depth(node.right)
@@ -106,18 +125,18 @@ class BreakPointAST extends acorn.Parser {
 				break
 			case 'Literal':
 				if (this.eventListener[node.type]) {
-					this.eventListener[node.type](this, node)
+					this.eventListener[node.type](this, node, (new BreakPointASTBuilder(this, node)))
 				}
 				return
 			case 'ExpressionStatement':
 				if (this.eventListener[node.type]) {
-					this.eventListener[node.type](this, node)
+					this.eventListener[node.type](this, node, (new BreakPointASTBuilder(this, node)))
 				}
 				this.depth(node.expression)
 				break
 			case 'CallExpression':
 				if (this.eventListener[node.type]) {
-					this.eventListener[node.type](this, node)
+					this.eventListener[node.type](this, node, (new BreakPointASTBuilder(this, node)))
 				}
 				this.depth(node.callee)
 				for (let arg of node.arguments) {
@@ -126,7 +145,7 @@ class BreakPointAST extends acorn.Parser {
 				break
 			case 'FunctionDeclaration':
 				if (this.eventListener[node.type]) {
-					this.eventListener[node.type](this, node)
+					this.eventListener[node.type](this, node, (new BreakPointASTBuilder(this, node)))
 				}
 				this.depth(node.id)
 				for (let param of node.params) {
@@ -136,7 +155,7 @@ class BreakPointAST extends acorn.Parser {
 				break
 			case 'BlockStatement':
 				if (this.eventListener[node.type]) {
-					this.eventListener[node.type](this, node)
+					this.eventListener[node.type](this, node, (new BreakPointASTBuilder(this, node)))
 				}
 				for (let bd of node.body) {
 					this.depth(bd)
