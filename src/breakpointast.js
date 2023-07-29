@@ -37,6 +37,19 @@ class BreakPointASTBuilder {
 		return n
 	}
 
+	createIdentifier(name) {
+		if (!this.ctx) return false;
+		if (!this.node) return false;
+
+
+		let n = new acorn.Node(this.ctx)
+
+		n.type = "Identifier"
+		n.start = this.node.start
+		n.name = name;
+
+		return n
+	}
 }
 
 

@@ -13,7 +13,7 @@ br.addNodeBreakPoint("BinaryExpression", function(ctx, node) {
 })
 
 br.addNodeBreakPoint("Literal", function(ctx, node, builder){
-    ctx.replaceExpression(node, builder.createLiteral(1337))
+    ctx.replaceExpression(node, builder.createIdentifier("Lolilol"))
 })
 
 br.walk()
