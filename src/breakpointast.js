@@ -9,7 +9,9 @@ class BreakPointASTReplacement {
 				"Literal", "Identifier", "BinaryExpression", "ExpressionStatement",
 				"CallExpression"
 			],
-			"BinaryExpression": ["Literal", "Identifier"]
+			"BinaryExpression": [
+				"Literal", "Identifier", "CallExpression"
+			]
 		}
 	}
 

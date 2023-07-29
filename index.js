@@ -18,6 +18,12 @@ br.addNodeBreakPoint("Literal", function(ctx, node, builder) {
     
     if (typeof node.value !== 'number') return;
 
+    ctx.replaceExpression(node, builder.createBinaryExpression(
+		'+', builder.createLiteral(node.value), builder.createLiteral(1337)
+		)
+	)
+
+
     ctx.replaceExpression(
         node, 
         builder.createCallExpression(
@@ -30,8 +36,10 @@ br.addNodeBreakPoint("Literal", function(ctx, node, builder) {
                 body=builder.createBlockStatement(
                     body=[
                         builder.createReturnStatement(
-                            argument=builder.createLiteral(
-                                node.value
+                            argument=builder.createBinaryExpression(
+                                node.operator,
+                                node.left,
+                                node.right
                             )
                         )
                     ]
@@ -40,31 +48,6 @@ br.addNodeBreakPoint("Literal", function(ctx, node, builder) {
         )
     )
     
-    /*
-    ctx.replaceExpression(
-        node, 
-        builder.createExpressionStatement(
-            builder.createCallExpression(
-                builder.createFunctionExpression(
-                    id=builder.createIdentifier("ok"),
-                    expression=false, 
-                    generator=false, 
-                    async=false, 
-                    params=[],
-                    body=builder.createBlockStatement(
-                        body=[
-                            builder.createReturnStatement(
-                                argument=builder.createLiteral(
-                                    node.value
-                                )
-                            )
-                        ]
-                    )
-                )
-            )
-        )
-    )
-    */
 })
 
 br.walk()
