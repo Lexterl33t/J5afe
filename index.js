@@ -8,7 +8,9 @@ function generate_string(size) {
 
 
 let code = `
-    let d = 10+10;
+    let d = (10 + 10) + 5 * 6 + 6 + 30 * 1337 - 10;
+    let c = d * 13 + 444 - 3 + 188
+    let dd = "lol"
 `
 
 let br = new BreakPointAST(code)
