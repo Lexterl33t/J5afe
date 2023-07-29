@@ -4,7 +4,7 @@ Dependances:
 <a href="https://github.com/acornjs/acorn">Acorn.js</a>
 
 
-Acorn is used for the parser and Breakpoint takes care of the recursive path.
+Acorn is used for the parser and BreakpointAST takes care of the recursive path.
 
 example
 ```js
