@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "acorn": "^8.10.0",
+    "astring": "^1.8.6"
+  }
+}
