@@ -15,7 +15,7 @@ function d() {
 let br = new BreakPointAST(code)
 
 br.addNodeBreakPoint("BinaryExpression", function(ctx, node) {
-   console.log(node)
+   console.log(ctx.evaluate(node))
 })
 
 br.walk()

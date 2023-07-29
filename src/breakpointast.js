@@ -40,6 +40,8 @@ class BreakPointAST extends acorn.Parser {
 			case '|': return this._evaluate(node.left) | this._evaluate(node.right)
 			case '^': return this._evaluate(node.right) ^ this._evaluate(node.right)
 			}
+		case 'Identifier':
+			return 0;
 		}
 	}
 
