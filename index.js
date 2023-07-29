@@ -1,4 +1,4 @@
-import BreakPointAST from './src/BreakPointASTBuilder.js'
+import BreakPointAST from './src/BreakPointAST.js'
 
 function generate_string(size) {
     return (Math.random() + 1).toString(36).substring(size);

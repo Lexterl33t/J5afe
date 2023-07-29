@@ -1,4 +1,5 @@
-import BreakPointASTObfuscation from './BreakPointASTObfuscation';
+import BreakPointASTObfuscation from './BreakPointASTObfuscation.js';
+
 
 
 export default class BreakPointASTObfuscationMBA extends BreakPointASTObfuscation {
