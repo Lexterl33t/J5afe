@@ -246,6 +246,8 @@ class BreakPointASTObfuscationMBA extends BreakPointASTObfuscation {
 			return node
 		case 'UnaryExpression':
 			return node
+		case 'Identifier':
+			return node
 		}
 	} 
 
@@ -283,7 +285,7 @@ class BreakPointASTObfuscationMBA extends BreakPointASTObfuscation {
 	}
 
 	addition_mba3(node) {
-		
+
 	}
 
 	substract_mba1(node) {
