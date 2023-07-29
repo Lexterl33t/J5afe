@@ -66,6 +66,67 @@ br.addNodeBreakPoint("Literal", function(ctx, node, builder) {
 })
 ```
 
+```js
+let d = 10 * 10 + (1 ^ 2) + 2000 * 300 - (2 * 6);
+let dd = "lol"
+```
+
+Become
+```js
+let d = (function ok() {
+  return 10;
+})() * (function ok() {
+  return 10;
+})() + ((function ok() {
+  return 1;
+})() ^ (function ok() {
+  return 2;
+})()) + (function ok() {
+  return 2000;
+})() * (function ok() {
+  return 300;
+})() - (function ok() {
+  return 2;
+})() * (function ok() {
+  return 6;
+})();
+let dd = "lol";
+```
+With
+
+```js
+let br = new BreakPointAST(code)
+
+br.addNodeBreakPoint("Literal", function(ctx, node, builder) {
+    
+    if (typeof node.value !== 'number') return;
+
+    ctx.replaceExpression(
+        node, 
+        builder.createCallExpression(
+            builder.createFunctionExpression(
+                id=builder.createIdentifier("ok"),
+                expression=false, 
+                generator=false, 
+                async=false, 
+                params=[],
+                body=builder.createBlockStatement(
+                    body=[
+                        builder.createReturnStatement(
+                            argument=builder.createLiteral(
+                                node.value
+                            )
+                        )
+                    ]
+                )
+            )
+        )
+    )
+})
+
+br.walk()
+```
+
 ## Deobfuscation
 Constant folding
 ```js
