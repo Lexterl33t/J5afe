@@ -211,24 +211,11 @@ class BreakPointASTObfuscationMBA extends BreakPointASTObfuscation {
 
 	constructor(ctx, node) {
 		super(ctx, node)
-		
 	}
-
-	addition_mba1(node) {
-		return super.createBinaryExpression(
-			'-',
-			node.left,
-			super.createUnaryExpression(
-				'-',
-				true,
-				node.right
-			)
-		)
-	}
-
 
 	generate_mba(node) {
-		if (node.type !== 'BinaryExpression') throw new Error("Node must be binary expression")
+		//if (node.type !== 'BinaryExpression') throw new Error("Node must be binary expression")
+
 		return this._generate_mba(node)
 	}
 	
@@ -236,24 +223,80 @@ class BreakPointASTObfuscationMBA extends BreakPointASTObfuscation {
 		
 		if (!node) return;
 
+		let choice;
 		switch (node.type) {
 		case 'BinaryExpression':
 			switch(node.operator) {
 			case '+':
-				return super.createBinaryExpression(
-					'-', 
-					this._generate_mba(node.left), 
-					super.createUnaryExpression(
-						'-',
-						true,
-						this._generate_mba(node.right)
-					)
-				)
+				choice = Math.floor(Math.random() * 2)
+				switch (choice) {
+				case 0:
+					return this.addition_mba1(node)
+				case 1:
+					return this.addition_mba2(node)
+				}
+			case '-':
+				choice = Math.floor(Math.random() * 1)
+				switch (choice) {
+				case 0:
+					return this.substract_mba1(node)
+				}
 			}
 		case 'Literal':
 			return node
+		case 'UnaryExpression':
+			return node
 		}
 	} 
+
+	addition_mba1(node) {
+		return super.createBinaryExpression(
+			'-',
+			this._generate_mba(node.left),
+			super.createUnaryExpression(
+				'-',
+				true,
+				this._generate_mba(node.right)
+			)
+		)
+	}
+
+	addition_mba2(node) {
+
+		return super.createUnaryExpression(
+			'-',
+			true,
+			super.createBinaryExpression(
+				'+',
+				super.createUnaryExpression(
+					'-',
+					true,
+					this._generate_mba(node.left)
+				),
+				super.createUnaryExpression(
+					'-',
+					true,
+					this._generate_mba(node.right)
+				)
+			)
+		)
+	}
+
+	addition_mba3(node) {
+		
+	}
+
+	substract_mba1(node) {
+		return super.createBinaryExpression(
+			'+',
+			this._generate_mba(node.left),
+			super.createUnaryExpression(
+				'-',
+				true,
+				this._generate_mba(node.right)
+			)
+		)
+	}
 }
 
 class BreakPointASTReplacement {
@@ -265,7 +308,11 @@ class BreakPointASTReplacement {
 				"CallExpression"
 			],
 			"BinaryExpression": [
-				"Literal", "Identifier", "CallExpression", "BinaryExpression"
+				"Literal", "Identifier", "CallExpression", "BinaryExpression",
+				"UnaryExpression"
+			],
+			"UnaryExpression": [
+				"BinaryExpression"
 			]
 		}
 	}

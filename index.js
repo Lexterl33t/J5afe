@@ -8,7 +8,7 @@ function generate_string(size) {
 
 
 let code = `
-    let d = 10 + 10 + 5 + 6;
+    let d = (10 + 10) + 5 * 6 + 6 + 30 * 1337 - 10;
     let dd = "lol"
 `
 
@@ -16,7 +16,6 @@ let br = new BreakPointAST(code)
 
 br.addNodeBreakPoint("BinaryExpression", function(ctx, node, builder, obfu) {
     ctx.replaceExpression(node, obfu.generate_mba(node))
-    console.log(obfu.generate_mba(node))
 })
 
 br.walk()

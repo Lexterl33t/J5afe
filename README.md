@@ -127,6 +127,28 @@ br.addNodeBreakPoint("Literal", function(ctx, node, builder) {
 br.walk()
 ```
 
+## MBA linear equation random
+```js
+let d = (10 + 10) + 5 * 6 + 6 + 30 * 1337 - 10;
+let dd = "lol"
+```
+
+Become
+```js
+let d = -(- -(-10 + -10) + -(5 * 6)) - -6 - -(30 * 1337) + -10;
+let dd = "lol";
+```
+With
+```js
+let br = new BreakPointAST(code)
+
+br.addNodeBreakPoint("BinaryExpression", function(ctx, node, builder, obfu) {
+    ctx.replaceExpression(node, obfu.generate_mba(node))
+})
+
+br.walk()
+```
+
 ## Deobfuscation
 Constant folding
 ```js
