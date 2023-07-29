@@ -21,6 +21,15 @@ br.addNodeBreakPoint("Literal", function(ctx, node, builder) {
 br.walk()
 
 
+br.addNodeBreakPoint("BinaryExpression", function(ctx, node, builder) {
+    console.log(ctx.evaluate(node))
+    ctx.replaceExpression(node, builder.createLiteral(ctx.evaluate(node)))
+})
+
+
+br.walk()
+
+
 
 let source_code = generate(br.ast, {
     comments: true,
