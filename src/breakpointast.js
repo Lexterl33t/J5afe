@@ -228,18 +228,22 @@ class BreakPointASTObfuscationMBA extends BreakPointASTObfuscation {
 		case 'BinaryExpression':
 			switch(node.operator) {
 			case '+':
-				choice = Math.floor(Math.random() * 2)
+				choice = Math.floor(Math.random() * 3)
 				switch (choice) {
 				case 0:
 					return this.addition_mba1(node)
 				case 1:
 					return this.addition_mba2(node)
+				case 2:
+					return this.addition_mba3(node)
 				}
 			case '-':
-				choice = Math.floor(Math.random() * 1)
+				choice = Math.floor(Math.random() * 2)
 				switch (choice) {
 				case 0:
 					return this.substract_mba1(node)
+				case 1:
+					return this.substract_mba2(node)
 				}
 			}
 		case 'Literal':
@@ -285,7 +289,24 @@ class BreakPointASTObfuscationMBA extends BreakPointASTObfuscation {
 	}
 
 	addition_mba3(node) {
-
+		let rand_num = Math.floor(Math.random() * 999999)
+		return super.createBinaryExpression(
+			'-',
+			super.createBinaryExpression(
+				'+',
+				super.createBinaryExpression(
+					'+',
+					this._generate_mba(node.left),
+					super.createLiteral(
+						rand_num
+					)
+				),
+				this._generate_mba(node.right)
+			),
+			super.createLiteral(
+				rand_num
+			)
+		)
 	}
 
 	substract_mba1(node) {
@@ -296,6 +317,28 @@ class BreakPointASTObfuscationMBA extends BreakPointASTObfuscation {
 				'-',
 				true,
 				this._generate_mba(node.right)
+			)
+		)
+	}
+
+	substract_mba2(node) {
+		let rand_num = Math.floor(Math.random() * 999999)
+
+		return super.createBinaryExpression(
+			'-',
+			super.createBinaryExpression(
+				'-',
+				super.createBinaryExpression(
+					'+',
+					this._generate_mba(node.left),
+					super.createLiteral(
+						rand_num
+					)
+				),
+				this._generate_mba(node.right)
+			),
+			super.createLiteral(
+				rand_num
 			)
 		)
 	}
