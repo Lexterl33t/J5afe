@@ -1,33 +1,26 @@
 const acorn = require('acorn')
 
 
-class BreakPointASTReplacement {
-
-	constructor() {
-		this.replacementList = {
-			"Literal": [
-				"Literal", "Identifier", "BinaryExpression", "ExpressionStatement",
-				"CallExpression"
-			],
-			"BinaryExpression": [
-				"Literal", "Identifier", "CallExpression"
-			]
-		}
-	}
-
-	getReplacementList() {
-		if (!this.replacementList) throw new Error("Replacement list not initialised")
-
-		return this.replacementList
-	}
-}
-
-
 class BreakPointASTBuilder {
 
 	constructor(ctx, node) {
 		this.node = node;
 		this.ctx = ctx
+	}
+
+	createUnaryExpression(op, prefix=true, argument) {
+		if (!this.ctx) return false;
+
+		if (!this.node) return false;
+
+		let n = new acorn.Node(this.ctx)
+
+		n.type = "UnaryExpression"
+		n.start = this.node.start
+		n.operator = op
+		n.prefix = prefix
+		n.argument = argument
+		return n
 	}
 	
 	createLiteral(value) {
@@ -189,7 +182,7 @@ class BreakPointASTBuilder {
 		if (!this.ctx) return false;
 		if (!this.node) return false;
 
-		console.log(body)
+
 		if (body.type !== 'BlockStatement') throw new Error("Body must be BlockStatement")
 		
 		let n = new acorn.Node(this.ctx)
@@ -206,6 +199,86 @@ class BreakPointASTBuilder {
 		return n;
 	}
 }
+
+
+class BreakPointASTObfuscation extends BreakPointASTBuilder {
+	constructor(ctx, node) {
+		super(ctx, node)
+	}
+}
+
+class BreakPointASTObfuscationMBA extends BreakPointASTObfuscation {
+
+	constructor(ctx, node) {
+		super(ctx, node)
+		
+	}
+
+	addition_mba1(node) {
+		return super.createBinaryExpression(
+			'-',
+			node.left,
+			super.createUnaryExpression(
+				'-',
+				true,
+				node.right
+			)
+		)
+	}
+
+
+	generate_mba(node) {
+		if (node.type !== 'BinaryExpression') throw new Error("Node must be binary expression")
+		return this._generate_mba(node)
+	}
+	
+	_generate_mba(node) {
+		
+		if (!node) return;
+
+		switch (node.type) {
+		case 'BinaryExpression':
+			switch(node.operator) {
+			case '+':
+				return super.createBinaryExpression(
+					'-', 
+					this._generate_mba(node.left), 
+					super.createUnaryExpression(
+						'-',
+						true,
+						this._generate_mba(node.right)
+					)
+				)
+			}
+		case 'Literal':
+			return node
+		}
+	} 
+}
+
+class BreakPointASTReplacement {
+
+	constructor() {
+		this.replacementList = {
+			"Literal": [
+				"Literal", "Identifier", "BinaryExpression", "ExpressionStatement",
+				"CallExpression"
+			],
+			"BinaryExpression": [
+				"Literal", "Identifier", "CallExpression", "BinaryExpression"
+			]
+		}
+	}
+
+	getReplacementList() {
+		if (!this.replacementList) throw new Error("Replacement list not initialised")
+
+		return this.replacementList
+	}
+}
+
+
+
 
 
 class BreakPointAST extends acorn.Parser {
@@ -313,7 +386,7 @@ class BreakPointAST extends acorn.Parser {
 				break
 			case 'BinaryExpression':
 				if (this.eventListener[node.type]) {
-					this.eventListener[node.type](this, node, (new BreakPointASTBuilder(this, node)))
+					this.eventListener[node.type](this, node, (new BreakPointASTBuilder(this, node)), (new BreakPointASTObfuscationMBA(this, node)))
 				} else {
 					this.depth(node.left)
 					this.depth(node.right)
