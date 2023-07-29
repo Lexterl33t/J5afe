@@ -4,7 +4,7 @@ Dependances:
 <a href="https://github.com/acornjs/acorn">Acorn.js</a>
 
 
-exemple
+example
 ```js
 
 var code = `
