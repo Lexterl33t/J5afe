@@ -2,7 +2,7 @@ const BreakPointAST = require('./src/breakpointast.js')
 
 let code = `
 
-let lol = 10 + 10;
+let lol = 100 * 100 + (1 ^ 2) + 4;
 
 let k = 16+lol;
 

@@ -38,7 +38,7 @@ class BreakPointAST extends acorn.Parser {
 			case '<<': return this._evaluate(node.left) << this._evaluate(node.right)
 			case '&': return this._evaluate(node.left) & this._evaluate(node.right)
 			case '|': return this._evaluate(node.left) | this._evaluate(node.right)
-			case '^': return this._evaluate(node.right) ^ this._evaluate(node.right)
+			case '^': return this._evaluate(node.left) ^ this._evaluate(node.right)
 			}
 		case 'Identifier':
 			return 0;
@@ -91,9 +91,10 @@ class BreakPointAST extends acorn.Parser {
 			case 'BinaryExpression':
 				if (this.eventListener[node.type]) {
 					this.eventListener[node.type](this, node)
+				} else {
+					this.depth(node.left)
+					this.depth(node.right)
 				}
-				this.depth(node.left)
-				this.depth(node.right)
 				break
 			case 'Literal':
 				if (this.eventListener[node.type]) {
