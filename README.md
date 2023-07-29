@@ -21,16 +21,16 @@ if (lol == 10 + 10) {
 
 let br = new BreakPointAST(code)
 
-br.addNodeBreakPoint("CallExpression", function(node) {
+br.addNodeBreakPoint("CallExpression", function(ctx, node) {
 	console.log(node)
 })
 
-br.addNodeBreakPoint("Literal", function(node) {
+br.addNodeBreakPoint("Literal", function(ctx,node) {
 	console.log(node.value)
 })
 
-br.addNodeBreakPoint("BinaryExpression", function(node) {
-	console.log(node)
+br.addNodeBreakPoint("BinaryExpression", function(ctx, node) {
+	console.log(ctx.evaluate(node))
 })
 
 br.walk()
