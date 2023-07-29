@@ -5,7 +5,8 @@ class BreakPointASTReplacement {
 
 	constructor() {
 		this.replacementList = {
-			"Literal": ["Literal", "Identifier"]
+			"Literal": ["Literal", "Identifier"],
+			"BinaryExpression": ["Literal"]
 		}
 	}
 

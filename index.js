@@ -1,36 +1,23 @@
 const BreakPointAST = require('./src/breakpointast.js')
 const {generate} = require("astring")
-const acorn = require('acorn')
+
 let code = `
-
-let d = 10;
-
+    let d = 10 * 10 - 30 * (4 + 5);
 `
+
 let br = new BreakPointAST(code)
 
-br.addNodeBreakPoint("BinaryExpression", function(ctx, node) {
-   console.log(ctx.evaluate(node))
-})
-
-br.addNodeBreakPoint("Literal", function(ctx, node, builder){
-    ctx.replaceExpression(node, builder.createIdentifier("Lolilol"))
+br.addNodeBreakPoint("BinaryExpression", function(ctx, node, builder) {
+    ctx.replaceExpression(
+        node, 
+        builder.createLiteral(ctx.evaluate(node))
+    )
 })
 
 br.walk()
 
-
-br.addNodeBreakPoint("BinaryExpression", function(ctx, node) {
-    console.log(ctx.evaluate(node))
+let source_code = generate(br.ast, {
+    comments: true,
 })
- 
-br.addNodeBreakPoint("Literal", function(ctx, node){
-     console.log(node.value)
-})
- 
-br.walk()
+console.log(source_code)
 
-console.log(br.ast.body[0].declarations)
- 
-
-let  formattedCode = generate(br.ast)
-console.log(formattedCode)
