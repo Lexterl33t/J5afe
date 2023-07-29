@@ -1,5 +1,4 @@
-const acorn = require('acorn')
-
+import * as acorn from 'acorn'
 
 class BreakPointASTBuilder {
 
@@ -370,10 +369,7 @@ class BreakPointASTReplacement {
 }
 
 
-
-
-
-class BreakPointAST extends acorn.Parser {
+export default class BreakPointAST extends acorn.Parser {
 
 	constructor(source_code) {
 		if (!source_code) throw new Error("Unknow source code !")
@@ -525,6 +521,3 @@ class BreakPointAST extends acorn.Parser {
 			}
 	}
 }
-
-
-module.exports = BreakPointAST

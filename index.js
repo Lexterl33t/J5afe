@@ -1,11 +1,8 @@
-const BreakPointAST = require('./src/breakpointast.js')
-const {generate} = require("astring");
-
+import BreakPointAST from './src/BreakPointASTBuilder.js'
 
 function generate_string(size) {
     return (Math.random() + 1).toString(36).substring(size);
 }
-
 
 let code = `
     let d = (10 + 10) + 5 * 6 + 6 + 30 * 1337 - 10;
@@ -20,14 +17,7 @@ br.addNodeBreakPoint("BinaryExpression", function(ctx, node, builder, obfu) {
 })
 
 br.walk()
-
-
-
-let source_code = generate(br.ast, {
-    comments: true,
-})
-
-console.log(source_code)
+console.log(br.ast)
 
 
 //console.log(br.ast.body[0].declarations[0])
