@@ -1,8 +1,7 @@
 ## BreakPointAST javascript library
 
-Dependances:
+Dependencies:
 <a href="https://github.com/acornjs/acorn">Acorn.js</a>
-
 
 Acorn is used for the parser and BreakpointAST takes care of the recursive path.
 
