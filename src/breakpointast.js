@@ -1,6 +1,14 @@
 const acorn = require('acorn')
 
+class BreakPointASTBuilder extends acorn.Node {
 
+	
+	createLiteral(value) {
+		return new acorn.Node(
+
+		)
+	}
+}
 
 
 class BreakPointAST extends acorn.Parser {
