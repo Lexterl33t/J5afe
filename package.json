@@ -2,5 +2,27 @@
   "type": "module",
   "dependencies": {
     "acorn": "^8.10.0"
-  }
+  },
+  "name": "j5afe",
+  "description": "Dependencies:\r <a href=\"https://github.com/acornjs/acorn\">Acorn.js</a>",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lexterl33t/j5afe.git"
+  },
+  "keywords": [
+    "Obfuscation/Deobfuscation",
+    "javascript",
+    "framework"
+  ],
+  "author": "Lxt3H",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lexterl33t/j5afe/issues"
+  },
+  "homepage": "https://github.com/Lexterl33t/A-lex#readme"
 }
