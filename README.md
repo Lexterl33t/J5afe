@@ -1,5 +1,9 @@
-## BreakPointAST javascript library
+## J5afe Javascript Obfuscation/Deobfuscation Framework
 
+### Installation
+```
+npm i j5afe
+```
 Dependencies:
 <a href="https://github.com/acornjs/acorn">Acorn.js</a>
 
