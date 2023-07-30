@@ -5,7 +5,7 @@
   },
   "name": "j5afe",
   "description": "Dependencies:\r <a href=\"https://github.com/acornjs/acorn\">Acorn.js</a>",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
