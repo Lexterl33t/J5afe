@@ -1,8 +1,8 @@
 import * as acorn from 'acorn'
 
-import BreakPointASTBuilder from './lib/BreakPointASTBuilder.js';
-import BreakPointASTObfuscationMBA from './lib/BreakPointASTObfuscationMBA.js';
-import BreakPointASTReplacement from './lib/BreakPointASTReplacement.js';
+import BreakPointASTBuilder from './BreakPointASTBuilder.js';
+import BreakPointASTObfuscationMBA from './BreakPointASTObfuscationMBA.js';
+import BreakPointASTReplacement from './BreakPointASTReplacement.js';
 
 export default class BreakPointAST extends acorn.Parser {
 
