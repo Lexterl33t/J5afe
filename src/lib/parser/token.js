@@ -51,6 +51,19 @@ class Token {
         LOGICAL_OR: 45,
         LOGICAL_NOT: 46,
         DECR: 48,
+        POWER: 49,
+        XORASS: 50,
+        ORASS: 51,
+        ANDASS: 52,
+        IF: 53,
+        ELSE: 54,
+        ELSEIF: 55,
+        TRY: 56,
+        CATCH: 57,
+        IN: 58,
+        OF: 59,
+        ASYNC: 60,
+        AWAIT: 61,
     }
    
 
