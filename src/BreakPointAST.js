@@ -99,6 +99,37 @@ export default class BreakPointAST extends acorn.Parser {
 				this.depth(node.id)
 				this.depth(node.init)
 				break
+			case 'ReturnStatement':
+				if (this.eventListener[node.type]) {
+					this.eventListener[node.type](this, node, (new BreakPointASTBuilder(this, node)))
+				} 
+
+				this.depth(node.argument)
+				break
+			case 'AssignmentExpression':
+				if (this.eventListener[node.type]) {
+					this.eventListener[node.type](this, node, (new BreakPointASTBuilder(this, node)))
+				}
+				this.depth(node.left)
+				this.depth(node.right)
+				break
+			case 'ArrowFunctionExpression':
+				if (this.eventListener[node.type]) {
+					this.eventListener[node.type](this, node, (new BreakPointASTBuilder(this, node)))
+				}
+
+				this.depth(node.params)
+				this.depth(node.body)
+				break
+			case 'ForOfStatement':
+				if (this.eventListener[node.type]) {
+					this.eventListener[node.type](this, node, (new BreakPointASTBuilder(this, node)))
+				} else {
+					this.depth(node.left)
+					this.depth(node.right)
+					this.depth(node.body)
+				}
+				break
 			case 'IfStatement':
 				if (this.eventListener[node.type]) {
 					this.eventListener[node.type](this, node, (new BreakPointASTBuilder(this, node)))
