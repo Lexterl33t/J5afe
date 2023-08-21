@@ -9,7 +9,7 @@ export default class BreakPointAST extends acorn.Parser {
 	constructor(source_code) {
 		if (!source_code) throw new Error("Unknow source code !")
 		
-		super({ecmaVersion: 6}, source_code)
+		super({ecmaVersion: 'latest'}, source_code)
 		this.ast = 	this.parse()
 		this.eventListener = {}
 		this.breakpoint_replacement = new BreakPointASTReplacement().getReplacementList()
